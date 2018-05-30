@@ -1,0 +1,15 @@
+export const LOAD_FILTERBYPOSITION_START = "LOAD_FILTERBYPOSITION_START";
+export const LOAD_FILTERBYPOSITION_SUCCESS = "LOAD_FILTERBYPOSITION_SUCCESS";
+export const LOAD_FILTERBYPOSITION_FAILURE = "LOAD_FILTERBYPOSITION_FAILURE";
+
+const url = "/job_position";
+
+export const loadFilterByPosition = () => ({
+  types: [
+    LOAD_FILTERBYPOSITION_START,
+    LOAD_FILTERBYPOSITION_SUCCESS,
+    LOAD_FILTERBYPOSITION_FAILURE
+  ],
+  meta: { viewId: "FILTERBYPOSITION" },
+  promise: ({ api }) => api.get(url)
+});

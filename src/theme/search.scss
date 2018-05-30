@@ -1,0 +1,101 @@
+section.category {
+  height: 300px;
+  padding: 20vh 0 0 0;
+  background: url("/images/banner.jpg") center center no-repeat;
+  position: relative;
+  background-size: cover;
+  text-align: center;
+  color: $search_color_1;
+  h2 {
+    margin: 0 0 30px;
+  }
+}
+.form_search_cat {
+  text-align: left;
+}
+section.inner-banner {
+  .form-inline {
+    .form-control {
+      height: 50px;
+    }
+    .input-group {
+      input[type="submit"] {
+        height: 50px;
+        -webkit-border-radius: 3px;
+      }
+    }
+    text-align: center;
+  }
+}
+.inner-banner {
+  .keyword_carrer {
+    background: url("/images/search.png") #fff no-repeat !important;
+    background-size: 18px 18px !important;
+    background-position: 12px 50% !important;
+    padding-left: 40px;
+  }
+  .province_search {
+    background: url("/images/location.png") #fff no-repeat;
+    background-size: 13px 20px !important;
+    background-position: 12px 50%;
+    padding-left: 40px;
+  }
+  .salary_search {
+    background: url("/images/money.png") #fff no-repeat;
+    background-size: 20px 18px !important;
+    background-position: 12px 50%;
+    padding-left: 40px;
+  }
+}
+.search-result {
+  .form-control {
+    &:not(.note-image-input) {
+      border: 1px solid #0e9bd6;
+      width: 50%;
+      padding: 0;
+      height: 25px;
+      font-size: 14px;
+      color: $search_color_2;
+    }
+  }
+  h2 {
+    color: $search_color_2;
+    font-size: 26px;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+  }
+  span {
+    b {
+      color: $search_color_2;
+      font-size: 20px;
+    }
+  }
+  .filter-list {
+    a {
+      color: $search_color_2;
+    }
+  }
+  .count_number {
+    font-size: 14px;
+    color: $color_3;
+  }
+  .field_search a {
+    color: $search_color_4;
+  }
+  .filters-wrap .filter-list ul li .field_search {
+    width: 100%;
+  }
+  .number_job_conform {
+    font-size: 16px;
+    // margin-right: 20px;
+    margin-top: 4px;
+  }
+  label.sort {
+    text-align: center;
+  }
+}
+.category {
+  span {
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,69 @@
+import { Component } from "react";
+import { object } from "prop-types";
+import { push } from "react-router-redux";
+export default class Paginate extends Component {
+  static contextTypes = {
+    i18n: object,
+    store: object
+  };
+  constructor(props, context) {
+    super(props, context);
+    const { store } = context.store;
+    this.state = { page: 1 };
+  }
+  nextPage(e, page) {
+    if (countJob === 10) {
+      nextPage = page + 1;
+      this.setState({
+        page: nextPage
+      });
+      this.props.updatePage(this.state.page);
+      // // const url = path + "?page=" + page;
+      // // window.location = url;
+      // this.props.changeStatus(null, page, url, store, companybId);
+    }
+  }
+  prePage(e, page) {
+    if (page === 1) {
+      const url = path;
+      return;
+    } else {
+      PrePage = page - 1;
+      this.setState({
+        page: PrePage
+      });
+      this.props.updatePage(this.state.page, this.props.path);
+      // this.props.changeStatus(null, page, url, store, companybId);
+      // const url = path + "?page=" + page;
+      // window.location = url;
+    }
+  }
+
+  render() {
+    const { l } = this.context.i18n;
+    let page = this.props.path.query.page;
+    if (typeof page === "undefined") {
+      page = 1;
+    }
+    page = parseInt(page);
+    const path = this.props.path.pathname;
+    // const url = this.props.path;
+    const countJob = this.props.countJob;
+    const store = this.props.store;
+    const companybId = this.props.companybId;
+    return (
+      <ul className="pagination">
+        <li className={page > 1 ? "active" : ""}>
+          <a className="pagination-link" onClick={e => this.prePage(e, page)}>
+            Trang trước
+          </a>
+        </li>
+        <li className={countJob === 10 ? "active" : ""}>
+          <a className="pagination-link" onClick={e => this.nextPage(e, page)}>
+            Trang sau
+          </a>
+        </li>
+      </ul>
+    );
+  }
+}

@@ -1,0 +1,160 @@
+import { Component } from "react";
+import { object } from "prop-types";
+import RenderHtml from "react-render-html";
+import { Link } from "react-router";
+import Helmet from "react-helmet";
+import config from "../../configs/appConfig";
+import AdSense from "react-adsense";
+
+export default class JobDetail extends Component {
+  static contextTypes = {
+    i18n: object
+  };
+
+  render() {
+    const { l } = this.context.i18n;
+    const jobdetail = this.props.detail;
+    const industrialSlug = this.props.industrialSlug;
+    const provinceSlug = this.props.provinceSlug;
+    const companySlug = this.props.companySlug;
+    if (jobdetail.job_contact === null) {
+      return <div />;
+    }
+    const province_id = jobdetail.job_contact.province_id;
+    let province_slug = provinceSlug[province_id];
+    let slug_title = "";
+    const company_slug =
+      companySlug[jobdetail.company_id] !== "undefined"
+        ? companySlug[jobdetail.company_id] + "/"
+        : "";
+    const industrial_zone_id = jobdetail.job_contact.industrial_zone_id;
+    if (industrial_zone_id !== 0 || industrial_zone_id !== null) {
+      slug_title =
+        "/" +
+        province_slug +
+        "/" +
+        (typeof industrialSlug[industrial_zone_id] === "undefined"
+          ? ""
+          : industrialSlug[industrial_zone_id] + "/");
+    } else {
+      slug_title = "/" + province_slug + "/" + company_slug;
+    }
+
+    const video_youtube =
+      jobdetail.video_id !== 0 ? (
+        <iframe
+          width="100%"
+          height="315"
+          src={
+            "https://www.youtube.com/embed/" +
+            jobdetail.video.youtube_id +
+            "?autoplay=1"
+          }
+        />
+      ) : (
+        ""
+      );
+
+    let jobDetailContent = null;
+    if (jobdetail.old_id === 0) {
+      jobDetailContent = RenderHtml(jobdetail.job_description);
+      return (
+        <div className="col-md-8 border-right-content">{jobDetailContent}</div>
+      );
+    } else {
+      const JobRequirement = requirement => {
+        if (requirement === null) {
+          return " ";
+        }
+        if (requirement.search("<br><br>") !== 0) {
+          requirement = requirement.slice(0, requirement.search("<br><br>"));
+        }
+        return RenderHtml(requirement);
+      };
+      const JobBenefit = jobdetail.job_benefit.map((benefit, index) => {
+        return <li key={index}>- {benefit.name}</li>;
+      });
+      const dateCreatedAt = date => {
+        return <Moment format="DD/MM/YYYY">{date}</Moment>;
+      };
+      const endedAt = endDate => {
+        return endDate == "0001-01-01T00:00:00Z" ? (
+          "Đến khi đủ số lượng"
+        ) : (
+          <Moment format="DD/MM/YYYY">{endDate}</Moment>
+        );
+      };
+      const numberOfRecruitment = conutJob => {
+        return conutJob == 0
+          ? "- Tuyển đến khi đủ số lượng"
+          : "- Số lượng: " + conutJob;
+      };
+      const stripTagHtml = body => {
+        var body_array = body.split("<br>");
+        var body_html = "";
+        body_array.forEach((item, index) => {
+          body_html += "<br> " + item;
+        });
+        return RenderHtml(body_html);
+      };
+      const contactNote = note => {
+        var note_array = note.split("<br>");
+        var contact_note_html = "";
+        note_array.forEach(item => {
+          contact_note_html += "<br> " + item;
+        });
+        return RenderHtml(contact_note_html);
+      };
+      const jobPostision = postition => {
+        if (postition !== 0) {
+          return RenderHtml("<br /> - Vị trí:" + jobdetail.job_position.name);
+        }
+      };
+      const numberPhone =
+        jobdetail.job_contact.contact_phone !== ""
+          ? RenderHtml(
+              "<br/> - Điện thoại: " + jobdetail.job_contact.contact_phone
+            )
+          : "";
+      return (
+        <div className="col-md-8 border-right-content">
+          <h2 className="content-middle-title">{jobdetail.company.name}</h2>
+          <AdSense.Google
+            client={config.adSenseClientId}
+            slot={config.adSenseSlotId}
+          />
+          {video_youtube}
+          <h3 className="mo-ta-cv">Mô tả công việc:</h3>
+          <div className="text-16">
+            {numberOfRecruitment(jobdetail.number_of_recruitment)}
+            {jobPostision(jobdetail.job_position_id)}
+            <br /> - Thời gian làm việc: {jobdetail.job_type.name}
+            <br /> - Địa điểm làm việc: {jobdetail.job_contact.contact_address}
+            {stripTagHtml(jobdetail.job_description)}
+          </div>
+          <h3 className="mo-ta-cv">Yêu cầu chung:</h3>
+          <div className="text-16">
+            - Kinh nghiệm: {jobdetail.job_experience.name}
+            <br />
+            {JobRequirement(jobdetail.job_requirement)}
+          </div>
+          <h3 className="mo-ta-cv">Quyền lợi:</h3>
+          <div className="text-16">
+            <ul className="style-ul">{JobBenefit}</ul>
+          </div>
+          <h3 className="mo-ta-cv">Thông tin liên hệ:</h3>
+          <div className="text-16">
+            - Tên công ty: {jobdetail.job_contact.contact_name}
+            {numberPhone}
+            <br /> - Địa chỉ: {jobdetail.job_contact.contact_address}
+            {contactNote(jobdetail.job_contact.contact_note)}
+            <br />
+            {jobdetail.job_contact.contact_email !== ""
+              ? "- Địa chỉ email:" + jobdetail.job_contact.contact_email
+              : ""}
+          </div>
+        </div>
+      );
+    }
+  }
+}
